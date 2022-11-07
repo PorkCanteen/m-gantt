@@ -1,0 +1,131 @@
+// 变量定义
+@headHeight: 60px; // 头部高度
+@lineHeight: 40px; // 行高
+@squareWidth: 40px; // 格子宽度
+
+// 布局
+.gantt-container {
+  height: 800px;
+  display: flex;
+  overflow: hidden;
+  .gantt-table, .gantt-chart {
+    .header {
+      position: sticky;
+      height: @headHeight;
+      border-bottom: 1px solid #808080;
+      background-color: #fff;
+      top: 0;
+      font-size: 0; // 去除svg间隙
+      background-color: #f9fafb;
+    }
+    .body {
+      height: 900px;
+      font-size: 0;
+    }
+  }
+  .gantt-table {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    border-right: 1px solid #808080;
+    .header {
+      z-index: 3;
+      margin-right: 10px;
+      font-size: 16px;
+    }
+    .body {
+      .resize {
+        position: sticky;
+        top: 0;
+        height: 900px;
+        min-width: 200px;
+        max-width: 900px;
+        overflow: scroll;
+        opacity: 0;
+        resize: horizontal;
+      }
+      .real-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: calc(100% - 10px);
+        margin: @headHeight 10px 0 0;
+        z-index: 2;
+      }
+      .real-content::-webkit-scrollbar {
+        width: 0!important;
+      }
+    }
+  }
+  .gantt-table::-webkit-scrollbar {
+    width: 0;
+  }
+  .gantt-chart {
+    position: relative;
+    overflow-x: scroll;
+    width: 0;
+    flex: 1;
+    .modal {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-size: 14px;
+      line-height: 24px;
+      background-color: #fff;
+      padding: 20px 30px;
+      box-shadow: 0 0 5px 3px #ccc;
+      .key {
+        display: inline-block;
+        width: 100px;
+      }
+    }
+    .show {
+      display: block;
+    }
+    .hide {
+      display: none;
+    }
+  }
+}
+
+.resize::-webkit-scrollbar {
+  width: 10px;
+  height: inherit;
+}
+
+// 表格
+table {
+  text-align: center;
+  border-spacing: 0;
+  thead tr {
+    height: @headHeight;
+    line-height: @squareWidth;
+  }
+  tbody tr {
+    height: @squareWidth;
+    line-height: @squareWidth;
+    transition: all 0.2s;
+    font-size: 14px;
+    cursor: pointer;
+    &:hover {
+      background-color: #f9fafb;
+    }
+    td {
+      border-bottom: 1px solid #eee;
+    }
+    .sub {
+      background-color: #eee;
+      font-size: 13px;
+      transform: translateX(20px);
+    }
+  }
+}
+
+// 进度条
+.bar {
+  transition: all 0.2s;
+  &:hover {
+    opacity: 0.8;
+  }
+}

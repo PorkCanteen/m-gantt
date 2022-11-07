@@ -1,0 +1,103 @@
+<div class="gantt-container">
+  <div class="gantt-table" #table>
+    <table>
+      <div class="header">
+        <thead>
+          <tr>
+            <th *ngFor="let col of ganttConfig.columns" [width]="col.width">{{col.title}}</th>
+          </tr>
+        </thead>
+      </div>
+      <div class="body">
+        <div class="resize"></div>
+        <div class="real-content">
+          <tbody>
+            <ng-container *ngFor="let row of ganttConfig.data">
+              <tr *ngIf="row.show" (click)="scrollToBar(row)">
+                <ng-container *ngFor="let col of ganttConfig.columns">
+                  <ng-container [ngSwitch]="col.field">
+                    <td *ngSwitchCase="'icon'" [class.sub]="row.parentId" [width]="col.width"
+                      style="color: #1e80ff; cursor: pointer;" (click)="showSubData(row.id); $event.stopPropagation()">
+                      <ng-container *ngIf="!row.open && !row.parentId">▶</ng-container>
+                      <ng-container *ngIf="row.open && !row.parentId">▼</ng-container>
+                    </td>
+                    <td *ngSwitchDefault [class.sub]="row.parentId" [width]="col.width">{{row[col.field]}}</td>
+                  </ng-container>
+                </ng-container>
+              </tr>
+            </ng-container>
+          </tbody>
+        </div>
+      </div>
+    </table>
+  </div>
+  <div class="gantt-chart" #chart>
+    <!-- 时间轴 -->
+    <div class="header" [style.width]="dateConfig.svgWidth + 'px'">
+      <svg [attr.width]="dateConfig.svgWidth" [attr.height]="timeLineHeight">
+        <g class="date" *ngFor="let month of dateConfig.monthList; let i = index;">
+          <text [attr.x]="month.left * squareWidth + 5" [attr.y]="timeLineHeight / 2 + 4"
+            style="font-size: 12px;">{{month.text}}</text>
+          <path [attr.d]="'M ' + month.left * squareWidth + ' 0 V 30'" stroke="#d9dde0"></path>
+          <line x1="0" y1="30" [attr.x2]="dateConfig.svgWidth" y2="30" stroke="#d9dde0" />
+        </g>
+      </svg>
+      <svg [attr.width]="dateConfig.svgWidth" [attr.height]="timeLineHeight">
+        <g class="date" *ngFor="let date of dateConfig.dateList; let i = index;">
+          <text [attr.x]="i * squareWidth + 5" [attr.y]="timeLineHeight / 2 + 4"
+            style="font-size: 12px;">{{date.text}}</text>
+          <text [attr.x]="i * squareWidth + 20" [attr.y]="timeLineHeight / 2 + 4"
+            style="font-size: 8px;">{{date.day}}</text>
+          <path [attr.d]="'M ' + i * squareWidth + ' 0 V 30'" stroke="#d9dde0"></path>
+        </g>
+      </svg>
+    </div>
+    <!-- 进度图 -->
+    <div class="body">
+      <svg [attr.width]="dateConfig.svgWidth" [attr.height]="ganttConfig.chartData.length * lineHeight">
+        <rect *ngFor="let row of ganttConfig.chartData; let i = index;" x="0" [attr.y]="lineHeight * i"
+          [attr.width]="dateConfig.svgWidth" [attr.heigth]="lineHeight" [attr.fill]="i % 2 === 0 ? '#fff' : '#f9fafb'">
+        </rect>
+        <path *ngFor="let date of dateConfig.dateList; let i = index;"
+          [attr.d]="'M ' + i * squareWidth + ' 0 V ' + ganttConfig.chartData.length * lineHeight" stoke="#d9dde0">
+        </path>
+        <line *ngFor="let row of ganttConfig.chartData; let i = index;" x1="0" [attr.y1]="lineHeight * i + lineHeight"
+          [attr.x2]="dateConfig.svgWidth" [attr.y2]="lineHeight * i + lineHeight" stroke="#d9dde0" />
+        <g class="bar" *ngFor="let row of ganttConfig.chartData; let i = index;" (mouseenter)="showDetail(row, true)"
+          (mouseleave)="showDetail(row)">
+          <!-- 全部 -->
+          <rect [id]="'bar_' + i" [attr.x]="row.startDay * squareWidth"
+            [attr.y]="i * lineHeight + (lineHeight - barHeight) / 2" [attr.width]="row.duration * squareWidth"
+            [attr.height]="barHeight" [attr.rx]="barHeight / 2" [attr.ry]="barHeight / 2"
+            [attr.fill]="row.parentId ? subBarColor : barColor"></rect>
+          <!-- 进度 -->
+          <rect [attr.x]="row.startDay * squareWidth" [attr.y]="i * lineHeight + (lineHeight - barHeight) / 2"
+            [attr.width]="(row.duration * squareWidth) * row.progress" [attr.height]="barHeight"
+            [attr.rx]="barHeight / 2" [attr.ry]="barHeight / 2"
+            [attr.fill]="row.parentId ? subProgressBarColor : progressBarColor">
+          </rect>
+          <text [attr.x]="row.startDay * squareWidth + 20" [attr.y]="(i + 0.5) * lineHeight + 5"
+            [attr.fill]="barFontColor" style="font-size: 12px;">{{row.name}}</text>
+        </g>
+      </svg>
+    </div>
+    <div class="modal" id="msg-modal" [class.show]="showModal">
+      <div>
+        <span class="key">任务名称：</span>
+        <span class="value">{{modalData.name}}</span>
+      </div>
+      <div>
+        <span class="key">开始时间：</span>
+        <span class="value">{{modalData.startDate}}</span>
+      </div>
+      <div>
+        <span class="key">状态：</span>
+        <span class="value">{{modalData.status}}</span>
+      </div>
+      <div>
+        <span class="key">进度：</span>
+        <span class="value">{{modalData.progress * 100}} %</span>
+      </div>
+    </div>
+  </div>
+</div>
