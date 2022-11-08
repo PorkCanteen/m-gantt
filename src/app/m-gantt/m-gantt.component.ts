@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { columns, data } from './data';
 
 @Component({
@@ -8,7 +8,7 @@ import { columns, data } from './data';
   styleUrls: ['./m-gantt.component.less'],
   providers: [DatePipe]
 })
-export class MGanttComponent implements OnInit, AfterViewInit {
+export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // 可定义变量
   public lineHeight: number = 43;
@@ -40,27 +40,35 @@ export class MGanttComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     // 监听左侧表格
-    this.table.nativeElement.addEventListener('scroll', (e: any) => {
-      // 当右侧进度图没有滚动时，使之随表格滚动
-      if (!this.scrollLock.isChartScroll) {
-        this.scrollLock.isTableScroll = true;
-        this.chart.nativeElement.scroll({
-          top: e.target?.scrollTop
-        })
-      }
-      this.scrollLock.isTableScroll = false;
-    })
+    this.table.nativeElement.addEventListener('scroll', this.scrollChart);
     // 监听右侧表格
-    this.chart.nativeElement.addEventListener('scroll', (e: any) => {
-      // 当左侧表格没有滚动时，使之随进度图滚动
-      if (!this.scrollLock.isTableScroll) {
-        this.scrollLock.isChartScroll = true;
-        this.table.nativeElement.scroll({
-          top: e.target?.scrollTop
-        })
-      }
-      this.scrollLock.isChartScroll = false;
-    })
+    this.chart.nativeElement.addEventListener('scroll', this.scrollTable);
+  }
+  private scrollChart = (e: any) => {
+    // 当右侧进度图没有滚动时，使之随表格滚动
+    if (!this.scrollLock.isChartScroll) {
+      this.scrollLock.isTableScroll = true;
+      this.chart.nativeElement.scroll({
+        top: e.target?.scrollTop
+      })
+    }
+    this.scrollLock.isTableScroll = false;
+  }
+  private scrollTable = (e: any) => {
+    // 当左侧表格没有滚动时，使之随进度图滚动
+    if (!this.scrollLock.isTableScroll) {
+      this.scrollLock.isChartScroll = true;
+      this.table.nativeElement.scroll({
+        top: e.target?.scrollTop
+      })
+    }
+    this.scrollLock.isChartScroll = false;
+  }
+
+  ngOnDestroy(): void {
+    this.table.nativeElement.removeEventListener('scroll', this.scrollChart);
+    this.chart.nativeElement.removeEventListener('scroll', this.scrollTable);
+    document.removeEventListener('mousemove', this.moveModal);
   }
 
   // 数据
@@ -167,19 +175,19 @@ export class MGanttComponent implements OnInit, AfterViewInit {
     progress: ''
   }
   public showDetail(row: any, flag = false): void {
-    const modal = document.querySelector('#msg-modal');
     if (flag) {
       this.showModal = true;
       this.modalData.name = row.name;
       this.modalData.startDate = row.startDate;
       this.modalData.status = row.status;
       this.modalData.progress = row.progress;
-      document.addEventListener('mousemove', e => {
-        modal?.setAttribute('style', `top: ${e.clientY}px; left: ${e.clientX - 510}px`);
-      })
+      document.addEventListener('mousemove', this.moveModal)
     } else {
       this.showModal = false
     }
+  }
+  private moveModal = (e: any) => {
+    document.querySelector('#msg-modal')?.setAttribute('style', `top: ${e.clientY}px; left: ${e.clientX - 510}px`);
   }
 
   // 表格展开
