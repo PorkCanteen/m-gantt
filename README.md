@@ -1,27 +1,21 @@
-# MGantt
+## 项目介绍
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.8.
+本项目是一个基于 Angular 框架实现的前端甘特图组件，它主要有以下功能
+1. 整体可根据按照规则配置的数据自动渲染
+2. 支持树形表格数据展示
+3. 支持点击滚动到任务位置
+4. 支持时间轴自定义
+5. 支持基本样式自定义
+6. 组件的功能在持续优化完善过程中
 
-## Development server
+项目主要特征如下
+1. 图形区域主要使用 SVG 语法绘制，不依赖其他工具，可塑性强
+2. 除 Angular 框架外，本组件无其他依赖包
+3. 样式部分使用 Less 语法
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+开发教程及流程梳理：
+[个人博客](https://porkcanteen.github.io/2022/11/05/%E7%94%98%E7%89%B9%E5%9B%BE%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%20part1/)
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+思路来源
+https://juejin.cn/post/7035107631588966430
+https://juejin.cn/post/7037744201064251423
