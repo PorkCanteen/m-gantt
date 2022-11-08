@@ -187,12 +187,11 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   private moveModal = (e: any) => {
-    document.querySelector('#msg-modal')?.setAttribute('style', `top: ${e.clientY}px; left: ${e.clientX - 510}px`);
+    document.querySelector('#msg-modal')?.setAttribute('style', `top: ${e.clientY}px; left: ${e.clientX - 500}px`);
   }
 
   // 表格展开
   public showSubData(id: string): void {
-    console.log(id)
     this.ganttConfig.data.forEach((item: any) => {
       if (item.id === id) {
         item.open = !item.open;
@@ -201,7 +200,6 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
         item.show = !item.show;
       }
     })
-    console.log(this.ganttConfig.data)
     this.ganttConfig.chartData = this.ganttConfig.data.filter((row: any) => {
       return row.show === true
     })
