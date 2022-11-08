@@ -30,31 +30,7 @@
     border-right: 1px solid #808080;
     .header {
       z-index: 3;
-      margin-right: 10px;
       font-size: 16px;
-    }
-    .body {
-      .resize {
-        position: sticky;
-        top: 0;
-        height: 900px;
-        min-width: 200px;
-        max-width: 900px;
-        overflow: scroll;
-        opacity: 0;
-        resize: horizontal;
-      }
-      .real-content {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: calc(100% - 10px);
-        margin: @headHeight 10px 0 0;
-        z-index: 2;
-      }
-      .real-content::-webkit-scrollbar {
-        width: 0!important;
-      }
     }
   }
   .gantt-table::-webkit-scrollbar {
@@ -87,11 +63,6 @@
       display: none;
     }
   }
-}
-
-.resize::-webkit-scrollbar {
-  width: 10px;
-  height: inherit;
 }
 
 // 表格

@@ -9,25 +9,22 @@
         </thead>
       </div>
       <div class="body">
-        <div class="resize"></div>
-        <div class="real-content">
-          <tbody>
-            <ng-container *ngFor="let row of ganttConfig.data">
-              <tr *ngIf="row.show" (click)="scrollToBar(row)">
-                <ng-container *ngFor="let col of ganttConfig.columns">
-                  <ng-container [ngSwitch]="col.field">
-                    <td *ngSwitchCase="'icon'" [class.sub]="row.parentId" [width]="col.width"
-                      style="color: #1e80ff; cursor: pointer;" (click)="showSubData(row.id); $event.stopPropagation()">
-                      <ng-container *ngIf="!row.open && !row.parentId">▶</ng-container>
-                      <ng-container *ngIf="row.open && !row.parentId">▼</ng-container>
-                    </td>
-                    <td *ngSwitchDefault [class.sub]="row.parentId" [width]="col.width">{{row[col.field]}}</td>
-                  </ng-container>
+        <tbody>
+          <ng-container *ngFor="let row of ganttConfig.data">
+            <tr *ngIf="row.show" (click)="scrollToBar(row)">
+              <ng-container *ngFor="let col of ganttConfig.columns">
+                <ng-container [ngSwitch]="col.field">
+                  <td *ngSwitchCase="'icon'" [class.sub]="row.parentId" [width]="col.width"
+                    style="color: #1e80ff; cursor: pointer;" (click)="showSubData(row.id); $event.stopPropagation()">
+                    <ng-container *ngIf="!row.open && !row.parentId">▶</ng-container>
+                    <ng-container *ngIf="row.open && !row.parentId">▼</ng-container>
+                  </td>
+                  <td *ngSwitchDefault [class.sub]="row.parentId" [width]="col.width">{{row[col.field]}}</td>
                 </ng-container>
-              </tr>
-            </ng-container>
-          </tbody>
-        </div>
+              </ng-container>
+            </tr>
+          </ng-container>
+        </tbody>
       </div>
     </table>
   </div>
