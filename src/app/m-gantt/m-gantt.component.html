@@ -53,10 +53,10 @@
     <div class="body">
       <svg [attr.width]="dateConfig.svgWidth" [attr.height]="ganttConfig.chartData.length * lineHeight">
         <rect *ngFor="let row of ganttConfig.chartData; let i = index;" x="0" [attr.y]="lineHeight * i"
-          [attr.width]="dateConfig.svgWidth" [attr.heigth]="lineHeight" [attr.fill]="i % 2 === 0 ? '#fff' : '#f9fafb'">
+          [attr.width]="dateConfig.svgWidth" [attr.height]="lineHeight" [attr.fill]="i % 2 === 0 ? '#fff' : '#f9fafb'">
         </rect>
         <path *ngFor="let date of dateConfig.dateList; let i = index;"
-          [attr.d]="'M ' + i * squareWidth + ' 0 V ' + ganttConfig.chartData.length * lineHeight" stoke="#d9dde0">
+          [attr.d]="'M ' + i * squareWidth + ' 0 V ' + ganttConfig.chartData.length * lineHeight" stroke="#d9dde0">
         </path>
         <line *ngFor="let row of ganttConfig.chartData; let i = index;" x1="0" [attr.y1]="lineHeight * i + lineHeight"
           [attr.x2]="dateConfig.svgWidth" [attr.y2]="lineHeight * i + lineHeight" stroke="#d9dde0" />
