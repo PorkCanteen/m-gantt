@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { columns, data } from './data';
+import { columns, customisedList, data } from './data';
 
 @Component({
   selector: 'app-m-gantt',
@@ -10,7 +10,7 @@ import { columns, data } from './data';
 })
 export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  // 可定义变量
+  // 1. 可定义变量
   public lineHeight: number = 43;
   public timeLineHeight: number = 30; // 时间轴高度（单层）
   public squareWidth: number = 40; // 格子宽度
@@ -31,6 +31,7 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.setGanttData();
+    this.setCustomisedData();
   }
 
   public scrollLock = {
@@ -38,11 +39,14 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
     isChartScroll: false
   }
 
+  // 2. 布局
   ngAfterViewInit(): void {
     // 监听左侧表格
     this.table.nativeElement.addEventListener('scroll', this.scrollChart);
     // 监听右侧表格
     this.chart.nativeElement.addEventListener('scroll', this.scrollTable);
+    // 根据表格高度设置进度条行高
+    this.lineHeight = document.querySelectorAll('.row')[0].clientHeight;
   }
   private scrollChart = (e: any) => {
     // 当右侧进度图没有滚动时，使之随表格滚动
@@ -71,7 +75,7 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
     document.removeEventListener('mousemove', this.moveModal);
   }
 
-  // 数据
+  // 3. 数据
   public ganttConfig: any = {
     columns: columns,
     data: data,
@@ -86,7 +90,7 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
     return data;
   }
 
-  // 时间轴
+  // 4. 时间轴
   public dateConfig: any = {
     startDate: new Date('2077-12-31'),
     endDate: new Date('1999-1-1'),
@@ -94,7 +98,8 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
     svgWidth: 0,
     svgHeight: 60,
     dateList: [],
-    monthList: []
+    monthList: [],
+    customisedList: []
   }
   // 配置时间轴数据
   private setGanttData(): void {
@@ -146,26 +151,20 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
       return row.show === true;
     })
   }
-
-  // 点击任务自动滚动
-  public scrollToBar(row: any): void {
-    const targetBar = document.querySelector(`#bar_${this.ganttConfig.chartData.indexOf(row)}`);
-    if (targetBar && this.table) {
-      // 目标进度条左侧与client距离
-      const x = targetBar.getBoundingClientRect().left;
-      // table右侧与client距离
-      const parentX = this.table.nativeElement.getBoundingClientRect().right;
-      const preScroll = this.chart.nativeElement.scrollLeft || 0;
-      const diff = x - parentX;
-      // 滚动
-      this.chart.nativeElement.scrollTo({
-        left: preScroll + diff,
-        behavior: 'smooth'
+  // 配置自定义时间轴
+  private setCustomisedData(): void {
+    customisedList.forEach(item => {
+      const start = (new Date(item.startDate).getTime() - this.dateConfig.startDate.getTime()) / (24 * 60 * 60 * 1000);
+      const length = (new Date(item.endDate).getTime() - new Date(item.startDate).getTime()) / (24 * 60 * 60 * 1000);
+      this.dateConfig.customisedList.push({
+        title: item.title,
+        start,
+        length
       })
-    }
+    })
   }
 
-  // 弹窗显示详情
+  // 5. 弹窗显示详情
   @ViewChild('msgModal') msgModal: any;
   public showModal: boolean = false;
   public modalData: any = {
@@ -190,7 +189,7 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
     document.querySelector('#msg-modal')?.setAttribute('style', `top: ${e.clientY}px; left: ${e.clientX - 500}px`);
   }
 
-  // 表格展开
+  // 6. 表格展开
   public showSubData(id: string): void {
     this.ganttConfig.data.forEach((item: any) => {
       if (item.id === id) {
@@ -203,5 +202,46 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ganttConfig.chartData = this.ganttConfig.data.filter((row: any) => {
       return row.show === true
     })
+  }
+
+  // 7. 点击任务自动滚动(单击)
+  private time: number = 200;
+  private timeout: any = null;
+  public scrollToBar(row: any): void {
+    clearTimeout(this.timeout); // 清除第一个单击事件
+    this.timeout = setTimeout(() => {
+      const targetBar = document.querySelector(`#bar_${this.ganttConfig.chartData.indexOf(row)}`);
+      if (targetBar && this.table) {
+        // 目标进度条左侧与client距离
+        const x = targetBar.getBoundingClientRect().left;
+        // table右侧与client距离
+        const parentX = this.table.nativeElement.getBoundingClientRect().right;
+        const preScroll = this.chart.nativeElement.scrollLeft || 0;
+        const diff = x - parentX;
+        // 滚动
+        this.chart.nativeElement.scrollTo({
+          left: preScroll + diff,
+          behavior: 'smooth'
+        })
+      }
+    }, this.time)
+  }
+
+  // 8. 创建/编辑任务(双击)
+  public editRow(row: any = null, isCreate: boolean = false): void {
+    clearTimeout(this.timeout);
+    if (isCreate) {
+      // 创建数据处理
+      if (row) {
+        // 创建二级数据
+        console.log('创建二级数据')
+      } else {
+        // 创建一级数据
+        console.log('创建一级数据')
+      }
+    } else {
+      // 双击编辑数据处理
+      console.log('编辑数据')
+    }
   }
 }

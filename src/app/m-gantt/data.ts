@@ -4,6 +4,7 @@ export const columns: Array<any> = [
   { title: '开始时间', width: '100px', field: 'startDate' },
   { title: '结束时间', width: '100px', field: 'endDate' },
   { title: '状态', width: '100px', field: 'status' },
+  { title: '+', width: '50px', field: 'tools' },
 ]
 
 export const data: Array<any> = [
@@ -19,5 +20,12 @@ export const data: Array<any> = [
   { id: '5', name: '任务6', startDate: '2022-9-25', endDate: '2022-10-5', status: '进行中', duration: 10, progress: 0.6, open: false, show: true },
   { id: '6', name: '任务7', startDate: '2022-9-25', endDate: '2022-10-7', status: '进行中', duration: 12, progress: 0.6, open: false, show: true },
   { id: '7', name: '任务8', startDate: '2022-9-30', endDate: '2022-10-13', status: '进行中', duration: 13, progress: 0.6, open: false, show: true },
+]
 
+export const customisedList: Array<any> = [
+  { title: '版本1.0', startDate: '2022/9/7', endDate: '2022/9/15' },
+  { title: '版本1.1', startDate: '2022/9/15', endDate: '2022/9/24' },
+  { title: '版本2.0', startDate: '2022/9/24', endDate: '2022/9/30' },
+  { title: '版本2.1', startDate: '2022/9/30', endDate: '2022/10/5' },
+  { title: '版本2.2', startDate: '2022/10/5', endDate: '2022/10/13' },
 ]

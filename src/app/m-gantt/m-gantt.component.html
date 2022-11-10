@@ -4,20 +4,27 @@
       <div class="header">
         <thead>
           <tr>
-            <th *ngFor="let col of ganttConfig.columns" [width]="col.width">{{col.title}}</th>
+            <th *ngFor="let col of ganttConfig.columns" [width]="col.width">
+              <span *ngIf="col.field !== 'tools'">{{col.title}}</span>
+              <span *ngIf="col.field === 'tools'" class="create-icon" (click)="editRow(null, true)">{{col.title}}</span>
+            </th>
           </tr>
         </thead>
       </div>
       <div class="body">
         <tbody>
           <ng-container *ngFor="let row of ganttConfig.data">
-            <tr *ngIf="row.show" (click)="scrollToBar(row)">
+            <tr class="row" *ngIf="row.show" (click)="scrollToBar(row)" (dblclick)="editRow(row)">
               <ng-container *ngFor="let col of ganttConfig.columns">
                 <ng-container [ngSwitch]="col.field">
                   <td *ngSwitchCase="'icon'" [class.sub]="row.parentId" [width]="col.width"
                     style="color: #1e80ff; cursor: pointer;" (click)="showSubData(row.id); $event.stopPropagation()">
                     <ng-container *ngIf="!row.open && !row.parentId">▶</ng-container>
                     <ng-container *ngIf="row.open && !row.parentId">▼</ng-container>
+                  </td>
+                  <td *ngSwitchCase="'tools'" [class.sub]="row.parentId" [width]="col.width">
+                    <span class="create-icon" *ngIf="!row.parentId"
+                      (click)="editRow(row, true); $event.stopPropagation()">+</span>
                   </td>
                   <td *ngSwitchDefault [class.sub]="row.parentId" [width]="col.width">{{row[col.field]}}</td>
                 </ng-container>
@@ -46,6 +53,15 @@
           <text [attr.x]="i * squareWidth + 20" [attr.y]="timeLineHeight / 2 + 4"
             style="font-size: 8px;">{{date.day}}</text>
           <path [attr.d]="'M ' + i * squareWidth + ' 0 V 30'" stroke="#d9dde0"></path>
+        </g>
+      </svg>
+      <!-- 自定义时间轴 -->
+      <svg [attr.width]="dateConfig.svgWidth" [attr.height]="timeLineHeight">
+        <g *ngFor="let item of dateConfig.customisedList; let i = index;">
+          <rect [attr.x]="item.start * squareWidth" [attr.y]="0" [attr.width]="item.length * squareWidth"
+            [attr.height]="timeLineHeight" [attr.fill]="i % 2 === 0 ? '#ddd' : '#eee'"></rect>
+          <text [attr.x]="(item.start + item.length / 2) * squareWidth - 12" [attr.y]="timeLineHeight / 2 + 4"
+            style="font-size: 12px;">{{item.title}}</text>
         </g>
       </svg>
     </div>

@@ -1,6 +1,6 @@
 // 变量定义
-@headHeight: 60px; // 头部高度
-@lineHeight: 40px; // 行高
+@headHeight: 90px; // 头部整体高度
+@lineHeight: 43px; // 行高
 @squareWidth: 40px; // 格子宽度
 
 // 布局
@@ -71,25 +71,32 @@ table {
   border-spacing: 0;
   thead tr {
     height: @headHeight;
-    line-height: @squareWidth;
+    line-height: @lineHeight;
   }
   tbody tr {
-    height: @squareWidth;
-    line-height: @squareWidth;
+    line-height: @lineHeight;
     transition: all 0.2s;
     font-size: 14px;
     cursor: pointer;
     &:hover {
       background-color: #f9fafb;
     }
-    td {
-      border-bottom: 1px solid #eee;
-    }
     .sub {
       background-color: #eee;
       font-size: 13px;
       transform: translateX(20px);
     }
+  }
+}
+
+// 创建按钮
+.create-icon {
+  font-size: 20px;
+  font-weight: 800;
+  color: #aaa;
+  cursor: pointer;
+  &:hover {
+    color: #1e80ff;
   }
 }
 
