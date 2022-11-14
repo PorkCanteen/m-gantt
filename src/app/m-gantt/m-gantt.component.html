@@ -23,8 +23,8 @@
                     <ng-container *ngIf="row.open && !row.parentId">▼</ng-container>
                   </td>
                   <td *ngSwitchCase="'tools'" [class.sub]="row.parentId" [width]="col.width">
-                    <span class="create-icon" *ngIf="!row.parentId"
-                      (click)="editRow(row, true); $event.stopPropagation()">+</span>
+                    <div class="create-icon" *ngIf="!row.parentId"
+                      (click)="editRow(row, true); $event.stopPropagation()">+</div>
                   </td>
                   <td *ngSwitchDefault [class.sub]="row.parentId" [width]="col.width">{{row[col.field]}}</td>
                 </ng-container>
