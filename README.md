@@ -14,8 +14,8 @@
 3. 样式部分使用 Less 语法
 
 开发教程及流程梳理：
-[个人博客](http://mqchen.club/2022/11/05/%E7%94%98%E7%89%B9%E5%9B%BE%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%EF%BC%88%E4%B8%80%EF%BC%89/)
+- [个人博客](https://mqchen.club/2022/11/05/20221105_%E7%94%98%E7%89%B9%E5%9B%BE%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%EF%BC%88%E4%B8%80%EF%BC%89/)
 
 思路来源
-https://juejin.cn/post/7035107631588966430
-https://juejin.cn/post/7037744201064251423
+- https://juejin.cn/post/7035107631588966430
+- https://juejin.cn/post/7037744201064251423
