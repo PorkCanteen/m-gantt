@@ -11,6 +11,8 @@ import { columns, customisedList, data } from './data';
 export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // 1. 可定义变量
+  public containerWidth: string = '1500px';
+  public containerHeight: string = 'auto';
   public lineHeight: number = 43;
   public timeLineHeight: number = 30; // 时间轴高度（单层）
   public squareWidth: number = 40; // 格子宽度
@@ -92,8 +94,8 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // 4. 时间轴
   public dateConfig: any = {
-    startDate: new Date('2077-12-31'),
-    endDate: new Date('1999-1-1'),
+    startDate: new Date('2077/12/31'),
+    endDate: new Date('1999/01/01'),
     total: 0,
     svgWidth: 0,
     svgHeight: 60,
@@ -169,7 +171,7 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
   public showModal: boolean = false;
   public modalData: any = {
     name: '任务1',
-    startDate: '2022-10-1',
+    startDate: '2022/10/01',
     status: '进行中',
     progress: ''
   }
@@ -186,7 +188,7 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   private moveModal = (e: any) => {
-    document.querySelector('#msg-modal')?.setAttribute('style', `top: ${e.clientY}px; left: ${e.clientX - 500}px`);
+    document.querySelector('#msg-modal')?.setAttribute('style', `top: ${e.clientY + 23}px; left: ${e.clientX + 12}px`);
   }
 
   // 6. 表格展开
