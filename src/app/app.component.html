@@ -1,1 +1,3 @@
-<app-m-gantt></app-m-gantt>
+<app-m-gantt [options]="styleOptions" (createSubTask)="createSubTask($event)" (createTask)="createTask($event)"
+  (editTask)="editTask($event)">
+</app-m-gantt>

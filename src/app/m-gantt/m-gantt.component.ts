@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { columns, customisedList, data } from './data';
 
 @Component({
@@ -10,10 +10,13 @@ import { columns, customisedList, data } from './data';
 })
 export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  // 自定义样式
+  @Input() options: any;
+
   // 1. 可定义变量
-  public containerWidth: string = '1500px';
-  public containerHeight: string = 'auto';
-  public lineHeight: number = 43;
+  public containerWidth: string = '1500px'; // 容器宽度
+  public containerHeight: string = 'auto'; // 容器高度
+  public lineHeight: number = 43; // 行高
   public timeLineHeight: number = 30; // 时间轴高度（单层）
   public squareWidth: number = 40; // 格子宽度
   public barHeight: number = 24; // 进度条高度
@@ -32,8 +35,23 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.preprocessStyles(this.options);
     this.setGanttData();
     this.setCustomisedData();
+  }
+
+  private preprocessStyles(styles: any): void {
+    this.containerWidth = styles.containerWidth || this.containerWidth;
+    this.containerHeight = styles.containerHeight || this.containerHeight;
+    this.lineHeight = styles.lineHeight || this.lineHeight;
+    this.timeLineHeight = styles.timeLineHeight || this.timeLineHeight;
+    this.squareWidth = styles.squareWidth || this.squareWidth;
+    this.barHeight = styles.barHeight || this.barHeight;
+    this.progressBarColor = styles.progressBarColor || this.progressBarColor;
+    this.barColor = styles.barColor || this.barColor;
+    this.subBarColor = styles.subBarColor || this.subBarColor;
+    this.subProgressBarColor = styles.subProgressBarColor || this.subProgressBarColor;
+    this.barFontColor = styles.barFontColor || this.barFontColor;
   }
 
   public scrollLock = {
@@ -230,20 +248,23 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // 8. 创建/编辑任务(双击)
+  @Output() createTask = new EventEmitter();
+  @Output() createSubTask = new EventEmitter();
+  @Output() editTask = new EventEmitter();
   public editRow(row: any = null, isCreate: boolean = false): void {
     clearTimeout(this.timeout);
     if (isCreate) {
       // 创建数据处理
       if (row) {
         // 创建二级数据
-        console.log('创建二级数据')
+        this.createSubTask.emit(row);
       } else {
         // 创建一级数据
-        console.log('创建一级数据')
+        this.createTask.emit(row);
       }
     } else {
       // 双击编辑数据处理
-      console.log('编辑数据')
+      this.editTask.emit(row);
     }
   }
 }
