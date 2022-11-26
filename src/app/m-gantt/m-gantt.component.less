@@ -1,8 +1,3 @@
-// 变量定义
-@headHeight: 90px; // 头部整体高度
-@lineHeight: 43px; // 行高
-@squareWidth: 40px; // 格子宽度
-
 // 布局
 .gantt-container {
   display: flex;
@@ -10,7 +5,6 @@
   .gantt-table, .gantt-chart {
     .header {
       position: sticky;
-      height: @headHeight;
       border-bottom: 1px solid #808080;
       background-color: #fff;
       top: 0;
@@ -66,12 +60,7 @@
 table {
   text-align: center;
   border-spacing: 0;
-  thead tr {
-    height: @headHeight;
-    line-height: @lineHeight;
-  }
   tbody tr {
-    line-height: @lineHeight;
     transition: all 0.2s;
     font-size: 14px;
     cursor: pointer;
@@ -79,7 +68,6 @@ table {
       background-color: #f9fafb;
     }
     td {
-      height: @lineHeight;
       padding: 0;
     }
     .sub {

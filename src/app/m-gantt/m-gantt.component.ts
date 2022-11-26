@@ -20,6 +20,7 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
   public timeLineHeight: number = 30; // 时间轴高度（单层）
   public squareWidth: number = 40; // 格子宽度
   public barHeight: number = 24; // 进度条高度
+  public headHeight: number = 90; // 头部整体高度
 
   public progressBarColor: string = '#1e80ff'; // 进度颜色
   public barColor: string = '#91beff'; // 进度条颜色
