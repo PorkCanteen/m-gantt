@@ -48,6 +48,7 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
     this.timeLineHeight = styles.timeLineHeight || this.timeLineHeight;
     this.squareWidth = styles.squareWidth || this.squareWidth;
     this.barHeight = styles.barHeight || this.barHeight;
+    this.headHeight = styles.headHeight || this.headHeight;
     this.progressBarColor = styles.progressBarColor || this.progressBarColor;
     this.barColor = styles.barColor || this.barColor;
     this.subBarColor = styles.subBarColor || this.subBarColor;
