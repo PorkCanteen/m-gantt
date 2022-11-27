@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { columns, customisedList, data } from './data';
+import { columns } from './data';
 
 @Component({
   selector: 'app-m-gantt',
@@ -36,6 +36,7 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.ganttConfig.data = this.data;
     this.preprocessStyles(this.options);
     this.setGanttData();
     this.setCustomisedData();
@@ -98,17 +99,50 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // 3. 数据
+  @Input() data: Array<any> = [];
+  @Input() customisedList: Array<any> = [];
+  // 配置项
+  @Input() config: any = {};
+
   public ganttConfig: any = {
     columns: columns,
-    data: data,
+    data: [],
     chartData: []
   }
   // 数据预处理
   private preprocessData(data: Array<any>): Array<any> {
+    // 有子项的数据集合
+    const parents: Array<any> = [];
     data.forEach(row => {
       const startDay = (new Date(row.startDate).getTime() - this.dateConfig.startDate.getTime()) / (24 * 60 * 60 * 1000);
       row.startDay = startDay;
+      if (row.parentId) {
+        parents.push(row.parentId);
+      }
     })
+    // 展开子项
+    if (this.config.openSub) {
+      data.forEach(row => {
+        row.show = true;
+        if (!row.parentId) {
+          if (parents.indexOf(row.id) !== -1) {
+            row.open = true
+          } else {
+            row.open = false
+          }
+        }
+      })
+    } else {
+      // 收起子项
+      data.forEach(row => {
+        if (!row.parentId) {
+          row.open = false;
+          row.show = true;
+        } else {
+          row.show = false;
+        }
+      })
+    }
     return data;
   }
 
@@ -168,14 +202,14 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
       lengthBefore += value;
     })
     // 数据预处理
-    this.ganttConfig.data = this.preprocessData(data);
+    this.ganttConfig.data = this.preprocessData(this.data);
     this.ganttConfig.chartData = this.ganttConfig.data.filter((row: any) => {
       return row.show === true;
     })
   }
   // 配置自定义时间轴
   private setCustomisedData(): void {
-    customisedList.forEach(item => {
+    this.customisedList.forEach(item => {
       const start = (new Date(item.startDate).getTime() - this.dateConfig.startDate.getTime()) / (24 * 60 * 60 * 1000);
       const length = (new Date(item.endDate).getTime() - new Date(item.startDate).getTime()) / (24 * 60 * 60 * 1000);
       this.dateConfig.customisedList.push({
