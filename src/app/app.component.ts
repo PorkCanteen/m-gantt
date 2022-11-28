@@ -14,6 +14,7 @@ export class AppComponent {
     openSub: true
   }
 
+  // 测试数据
   public data: Array<any> = [
     { id: '0', name: '任务1', startDate: '2022/9/10', endDate: '2022/9/20', status: '进行中', duration: 10, progress: 0.6 },
     { id: '01', name: '子任务1', startDate: '2022/9/10', endDate: '2022/9/15', status: '进行中', duration: 5, progress: 0.9, parentId: '0' },
