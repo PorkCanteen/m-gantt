@@ -97,6 +97,10 @@
           <text [attr.x]="row.startDay * squareWidth + 20" [attr.y]="(i + 0.5) * lineHeight + 5"
             [attr.fill]="barFontColor" style="font-size: 12px;">{{row.name}}</text>
         </g>
+        <polygon [attr.points]="todayPosition.top" style="fill: red;" />
+        <path [attr.d]="'M ' + todayStart * squareWidth + ' 0 V ' + ganttConfig.chartData.length * lineHeight"
+          stroke="red" stroke-width="2" />
+        <polygon [attr.points]="todayPosition.bottom" style="fill: red;" />
       </svg>
     </div>
     <div class="modal" id="msg-modal" [class.show]="showModal">

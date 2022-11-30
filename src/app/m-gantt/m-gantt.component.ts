@@ -70,6 +70,8 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
     this.chart.nativeElement.addEventListener('scroll', this.scrollTable);
     // 根据表格高度设置进度条行高
     this.lineHeight = document.querySelectorAll('.row')[0].clientHeight;
+    // 处理今日刻度线
+    this.handleTodayData();
   }
   private scrollChart = (e: any) => {
     // 当右侧进度图没有滚动时，使之随表格滚动
@@ -144,6 +146,18 @@ export class MGanttComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     }
     return data;
+  }
+
+  // 当日刻度线处理
+  public todayStart: number = 0;
+  public todayPosition: any = {
+    top: '',
+    bottom: ''
+  }
+  private handleTodayData(): void {
+    this.todayStart = (new Date().getTime() - this.dateConfig.startDate.getTime()) / (24 * 60 * 60 * 1000);
+    this.todayPosition.top = `${this.todayStart * this.squareWidth - 5},0 ${this.todayStart * this.squareWidth + 5},0 ${this.todayStart * this.squareWidth},10`;
+    this.todayPosition.bottom = `${this.todayStart * this.squareWidth - 5},${this.ganttConfig.chartData.length * this.lineHeight} ${this.todayStart * this.squareWidth + 5},${this.ganttConfig.chartData.length * this.lineHeight} ${this.todayStart * this.squareWidth},${this.ganttConfig.chartData.length * this.lineHeight - 10}`;
   }
 
   // 4. 时间轴
